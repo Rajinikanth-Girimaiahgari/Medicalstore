@@ -1,0 +1,80 @@
+pipeline{
+
+    agent any
+    
+    tools{
+    
+	maven 'MAVEN_HOME'
+	
+	}
+    stages{
+    
+	stage('Upload war to Nexus'){
+	
+	    steps{
+	
+		configFileProvider([configFile(fileId: 'm2-global', variable:'MVN_SETTINGS')]) {
+		
+   		   sh 'mvn -s $MVN_SETTINGS deploy -Dmaven.test.skip=true'
+		   
+		 }
+		 
+	     }  
+	     
+	   }
+	   
+	stage('upload docker image to nexus'){
+	
+	   steps{
+	   
+	   	withCredentials([usernamePassword(credentialsId: 'nexus-creds', passwordVariable: 'pwd', usernameVariable: 'uname')]) {
+   	
+		sh 'docker build -t ice-cream/flavour:latest .'
+		
+		sh 'docker tag ice-cream/flavour:latest ec59141d1440.ngrok.io/ice-cream/flavour:latest'
+		
+		sh "docker login -u '${uname}' -p '${pwd}' ec59141d1440.ngrok.io"
+		
+		sh 'docker push ec59141d1440.ngrok.io/ice-cream/flavour:latest'
+		
+		
+		
+		}
+	   	
+			
+		}
+	   }
+	   
+	   
+	   
+	stage('Run our own Ice-Cream-Flavour'){
+	
+	   steps{
+	      	
+		sh "docker pull ec59141d1440.ngrok.io/ice-cream/flavour:latest"
+		
+		sh(returnStdout: true, script: '''#!/bin/bash
+          		 if [ "$(docker ps -qa -f name=ice)" ]; then
+    			     if [ "$(docker ps -q -f name=ice)" ]; then
+        			 docker stop ice;
+    			     fi
+    			     docker rm ice; 
+			 fi
+       			 '''.stripIndent())
+
+	  	sh 'docker run -d -p 8987:8080 --name=ice ec59141d1440.ngrok.io/ice-cream/flavour:latest'
+
+		sh 'docker ps'
+		
+		
+	   
+	   }
+	   
+	   }
+	
+	  }
+	}
+
+
+  
+    
