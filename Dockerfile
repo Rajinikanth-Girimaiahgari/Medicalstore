@@ -1,4 +1,4 @@
-FROM maven:3.6.1-jdk-8 as maven_builder
+FROM maven:3.9.2-jdk-8 as maven_builder
 
 WORKDIR /app
 
@@ -10,6 +10,6 @@ ADD . /app
 
 RUN ["mvn","clean","install","-T","2C","-DskipTests=true"]
 
-FROM tomcat:8.5.43-jdk8
+FROM tomcat:10.1-jdk8
 
 COPY --from=maven_builder /app/target/*.war C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps
