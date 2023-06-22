@@ -2,7 +2,7 @@ pipeline {
 
     agent {
 
-        label "master"
+        label "Built-In Node"
     }
     tools{
         maven "Maven"
