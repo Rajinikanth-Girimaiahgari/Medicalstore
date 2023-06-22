@@ -1,41 +1,24 @@
 pipeline {
-     	agent any
-     tools{
+    agent any
+    tools{
         maven "Maven"
-	 }
+    }
     stages {
+        stage('Clean') {
+            steps {
+               sh "mvn clean"
+             }
+         }
         stage('Build') {
             steps {
-    	           sh 'mvn -B -DskipTests clean package'
-            }
-        }
+               sh "mvn compile"
+             } 
+         } 
         stage('Test') {
             steps {
-                sh 'mvn test'
-            }
-        }
-        stage("SonarQube Analysis") {
-            steps {
-                withSonarQubeEnv('sonar') {
-                sh 'mvn sonar:sonar'
-                  }
+               sh "mvn  test -DskipTests=true"
              }
-           }
-
-	//stage("Trigger Nexus Job"){
-	  //  steps{
-		//build wait: true, job: '/Ice-Cream-Nexus'
-	    //}
-
-//	 }
-
-  	}
-
-//	post {
-  //        always {
-	//	  archiveArtifacts artifacts: 'target/My-Ice-Cream-Flavour!.war'
-      //       junit  'target/surefire-reports/*.xml'
-           //  }
-	//}
-
+         }
+     }
 }
+
