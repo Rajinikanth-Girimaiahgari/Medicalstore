@@ -2,6 +2,7 @@ pipeline {
      agent any
     tools{
         maven "Maven"
+         'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
     }
     stages {
         stage('Clean') {
@@ -21,7 +22,7 @@ pipeline {
          }
         stage('Docker') {
             steps {
-               sh "/var/run/docker build -t test:v1 ."
+               sh "docker build -t test:v1 ."
                 sh "docker images"
                 sh "docker ps -a"
                 sh "docker run -d -p 2002:2002 test:v1"
