@@ -5,7 +5,7 @@ pipeline {
         label "master"
     }
     tools{
-        maven "maven"
+        maven "Maven"
     }
 
     stages {
