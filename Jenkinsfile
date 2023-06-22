@@ -3,14 +3,14 @@ pipeline {
     agent {
 
         label "master"
-    }
-	 tools{
+      	}
+    tools{
         maven "Maven"
 	 }
     stages {
         stage('Build') {
             steps {
-    			sh 'mvn -B -DskipTests clean package'
+    	           sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Test') {
