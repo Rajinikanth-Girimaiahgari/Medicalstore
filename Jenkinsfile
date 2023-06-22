@@ -1,8 +1,8 @@
 pipeline {
 
-     agent {
+     Node {
 
-        label "main"
+        node "Built-In Node"
     }
     tools{
         maven "maven"
