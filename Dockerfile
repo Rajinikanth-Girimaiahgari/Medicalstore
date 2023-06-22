@@ -12,4 +12,4 @@ RUN ["mvn","clean","install","-T","2C","-DskipTests=true"]
 
 FROM tomcat:8.5.43-jdk8
 
-COPY --from=maven_builder /app/target/*.war /usr/local/tomcat/webapps
+COPY --from=maven_builder /app/target/*.war C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps
