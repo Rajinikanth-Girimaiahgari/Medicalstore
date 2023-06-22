@@ -4,13 +4,13 @@ pipeline {
 
         label "master"
     }
+	 tools{
+        maven "Maven"
+	 }
     stages {
         stage('Build') {
             steps {
-		    withMaven(globalMavenSettingsConfig: '', jdk: '', maven: '', mavenSettingsConfig: '', traceability: true) {
     			sh 'mvn -B -DskipTests clean package'
-			}
-                
             }
         }
         stage('Test') {
