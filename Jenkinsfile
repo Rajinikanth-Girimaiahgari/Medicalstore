@@ -21,7 +21,7 @@ pipeline {
          }
         stage('Docker') {
             steps {
-               sh "docker build -t test:v1 ."
+               sh "/var/run/docker build -t test:v1 ."
                 sh "docker images"
                 sh "docker ps -a"
                 sh "docker run -d -p 2002:2002 test:v1"
