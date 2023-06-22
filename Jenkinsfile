@@ -2,10 +2,12 @@ pipeline {
     agent any
     tools{
         maven "Maven"
-        docker {
+    }
+     agent {
+      	docker {
         	image 'maven:3.5.0'
-    }
-    }
+        }
+      }
     stages {
         stage('Clean') {
             steps {
